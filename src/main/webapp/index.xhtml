@@ -1,0 +1,151 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:fn="http://xmlns.jcp.org/jsp/jstl/functions"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<h:head></h:head> 
+<body> 
+	<p:panel>
+		<ui:param name = "valor" value = "#{vistaBean.numCambiante}" />
+		<ui:param name = "matricula" value = "#{sesionBean.matriculaUsuario}" />
+		
+		<p:panelGrid columns = "1" style="width: 50%">
+			<p:outputLabel
+				value = "PRUEBA TEST 08:57">
+			</p:outputLabel>
+			
+
+
+
+			<h:form id = "idFormTextoCambiante" >
+				<p:panelGrid columns = "2" style="width: 100%">
+					<p:commandButton
+						value = "Cambiar texto" actionListener = "#{vistaBean.rellenaTexto()}">
+					</p:commandButton>
+					
+					<p:outputLabel
+						id = "idLabelCambiante" value = "#{valor}">				
+					</p:outputLabel>				
+				</p:panelGrid>				
+			</h:form>
+
+
+
+
+			<h:form id = "idFormMatriculaSesion">
+				<p:panelGrid columns = "2" style="width: 100%">
+					<p:outputLabel>Usuario (matrícula)</p:outputLabel>
+					
+					<p:panelGrid columns = "4">
+						<p:outputLabel
+							id = "idMatriculaOut" value = "#{matricula}">
+						</p:outputLabel>
+						
+						<p:inputText 
+							id = "inMatriculaIn" value = "#{matricula}">
+							<f:validator validatorId = "validadorSesion"/>
+							<f:attribute name = "containerBean" value = "#{vistaBean}"/>
+						</p:inputText>
+						
+						<p:commandButton
+							value ="Iniciar sesión" actionListener = "#{vistaBean.ajustarUsuarioInicioSesion()}" update="idMessageSesion">
+						</p:commandButton>
+						
+						<p:commandButton
+							value ="Cerrar sesión" actionListener = "#{vistaBean.ajustarUsuarioCierreSesion()}">
+						</p:commandButton>
+					</p:panelGrid>
+
+					<h:panelGroup id="iconoSesion" styleClass="centered">
+						<img src="assets/#{vistaBean.iconoIniciarSesion}" alt="Bootstrap" width="28" height="28" />
+					</h:panelGroup>
+										
+					<h:message id = "idMessageSesion" for = "inMatriculaIn" style="color:red"/>
+					
+					<h:panelGroup/>
+					
+					<p:dataTable value = "#{vistaBean.recuperarNombresTareasFromHashMap()}" var = "tarea" id ="idListTareas" rowIndexVar = "row">	
+						<p:column>
+							<f:facet name = "header">Tarea pendiente: </f:facet>
+							#{tarea[0]}
+						</p:column>
+						<p:column>
+							<f:facet name = "header">Fecha de creación: </f:facet>
+							#{tarea[1]}
+						</p:column>
+						<p:column>
+							<p:commandButton
+								value = "Finalizar tarea" actionListener = "#{vistaBean.finalizarTareaPendiente(row)}">
+							</p:commandButton>
+						</p:column>
+					</p:dataTable>
+					
+					<h:panelGroup/>
+					
+					<p:dialog id="myDialogID" widgetVar="myDialogVar">
+						MEC!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+					</p:dialog>			
+				</p:panelGrid>			
+			</h:form>
+			
+			
+			
+
+			<h:form id = "idFormListadoProcesos">
+				<p:panelGrid columns = "2" style="width: 100%">
+					<p:commandButton
+						value = "Mostrar definición procesos" actionListener = "#{vistaBean.mostrarDefinicionProcesosCamunda()}">
+					</p:commandButton>
+					
+					<p:dataTable value = "#{vistaBean.recuperarNombresProcesosFromHashMap()}" var = "proceso" id ="idListProcDef">	
+						<p:column>
+							<f:facet name = "header">Nombre del proceso: </f:facet>
+							#{proceso}
+						</p:column>
+					</p:dataTable>
+				</p:panelGrid>			
+			</h:form>
+
+			
+			
+			
+			
+			<h:form id = "idFormGestionProcesos">
+				<p:panelGrid columns = "2" style="width: 100%">
+					<p:outputPanel>Seleccionar definición de proceso</p:outputPanel>
+				
+					<p:panelGrid columns = "1">
+						<p:panelGrid columns = "4">
+							<p:selectOneMenu id = "idDesplegableProcDef" value = "#{vistaBean.procesoSeleccionado}">
+								<f:selectItems value = "#{vistaBean.recuperarNombresProcesosFromHashMap()}"></f:selectItems> 
+							</p:selectOneMenu>
+							
+							<p:commandButton
+								value = "Arrancar proceso" actionListener="#{vistaBean.arrancarProcesoCamunda()}">
+							</p:commandButton>
+							
+							<p:commandButton
+								value = "Finalizar proceso">
+							</p:commandButton>
+							
+							<p:commandButton
+								value = "Consultar tareas del proceso" actionListener="#{vistaBean.mostrarTareasPendientesUsuario()}">
+							</p:commandButton>	
+						</p:panelGrid>
+
+						<p:outputLabel
+							id = "idProcesoArrancado" value = "#{vistaBean.mensajeProcesoArrancado}">
+						</p:outputLabel>					
+					</p:panelGrid>					
+				</p:panelGrid>
+			</h:form>
+			
+		</p:panelGrid>
+					
+	</p:panel>
+</body> 
+</html>
